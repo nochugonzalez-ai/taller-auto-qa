@@ -1,0 +1,33 @@
+name: Pipeline Ejecutor de Pruebas QA
+
+# 1. ¿Cuándo se activa?: Cada vez que hagamos un 'git push' a la rama main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  ejecutar-tests:
+    # 2. El entorno: Le pedimos a GitHub una máquina limpia con Linux Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+    # Paso 1: Descargar el código que acabamos de subir al repositorio
+    - name: Descargar codigo del repositorio
+      uses: actions/checkout@v4
+
+    # Paso 2: Instalar y configurar Python en esa máquina virtual
+    - name: Configurar Python en el servidor
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    # Paso 3: Instalar las dependencias de QA usando nuestro requirements.txt
+    - name: Instalar dependencias de QA
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Paso 4: Dejar que pytest tome el control y ejecute la suite de pruebas
+    - name: Ejecutar Test Suite con Pytest
+      run: |
+        pytest -v
