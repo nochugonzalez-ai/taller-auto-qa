@@ -24,5 +24,4 @@ def test_login_exitoso_tienda(page: Page):
     
     assert "/inventory.html" in url_actual, f"Error: El login falló, nos quedamos en {url_actual}"
     print("✓ PASÓ: El login fue exitoso y entramos a la tienda.")
-# Código basura de prueba para simular un descuido:
-exec("print('Hola, soy una vulnerabilidad')")
+
