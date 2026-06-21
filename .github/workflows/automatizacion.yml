@@ -19,13 +19,13 @@ jobs:
       with:
         python-version: '3.11'
 
-    # Paso 3: Instalar todas las dependencias (pytest, playwright, bandit, etc.)
+    # Paso 3: Instalar todas las dependencias
     - name: Instalar dependencias de QA y Seguridad
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Paso 4: NUEVO - Escaneo de Seguridad Estática (SAST) con Bandit
+    # Paso 4: Escaneo de Seguridad Estática (SAST) con Bandit
     - name: Ejecutar Escaneo de Seguridad con Bandit
       run: |
         bandit -r .
@@ -34,7 +34,7 @@ jobs:
     - name: Instalar Navegadores de Playwright
       run: playwright install --with-deps
 
-    # Paso 6: Ejecutar las pruebas funcionales
+    # Paso 6: Ejecutar las pruebas funcionales (API y Web)
     - name: Ejecutar Test Suite con Pytest
       run: |
         pytest -v
