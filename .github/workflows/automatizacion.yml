@@ -1,3 +1,4 @@
+# Intento de limpieza del pipeline seguro
 name: Pipeline Ejecutor de Pruebas QA
 
 on:
