@@ -1,17 +1,15 @@
 name: Pipeline Ejecutor de Pruebas QA
 
-# ¿Cuándo se activa?: Cada vez que hagamos un 'git push' a la rama main
 on:
   push:
     branches: [ "main" ]
 
 jobs:
   ejecutar-tests:
-    # El entorno: Le pedimos a GitHub una máquina limpia con Linux Ubuntu
     runs-on: ubuntu-latest
 
     steps:
-    # Paso 1: Descargar el código del repositorio
+    # Paso 1: Descargar el código
     - name: Descargar codigo del repositorio
       uses: actions/checkout@v4
 
@@ -21,17 +19,22 @@ jobs:
       with:
         python-version: '3.11'
 
-    # Paso 3: Instalar las dependencias (requests, pytest, playwright, etc.)
-    - name: Instalar dependencias de QA
+    # Paso 3: Instalar todas las dependencias (pytest, playwright, bandit, etc.)
+    - name: Instalar dependencias de QA y Seguridad
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # Paso 4: NUEVO - Descargar los navegadores headless dentro de la máquina de GitHub
+    # Paso 4: NUEVO - Escaneo de Seguridad Estática (SAST) con Bandit
+    - name: Ejecutar Escaneo de Seguridad con Bandit
+      run: |
+        bandit -r .
+
+    # Paso 5: Descargar los navegadores para Playwright
     - name: Instalar Navegadores de Playwright
       run: playwright install --with-deps
 
-    # Paso 5: Dejar que pytest ejecute TODO (API y WEB) de forma consecutiva
+    # Paso 6: Ejecutar las pruebas funcionales
     - name: Ejecutar Test Suite con Pytest
       run: |
         pytest -v
